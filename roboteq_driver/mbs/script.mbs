@@ -17,30 +17,30 @@ setcommand(_VAR, 1, -1)
 ' www.roboteq.com/index.php/docman/motor-controllers-documents-and-files/documentation/user-manual/7-nextgen-controllers-user-manual/file
 
 setconfig(_ECHOF, 1) ' Serial echo off (p195)
-setconfig(_RWD, 110) ' Watchdog timeout, milliseconds (p195)
+setconfig(_RWD, 0) ' Watchdog timeout, milliseconds (p195)
 setconfig(_AMOD, 1, 1) ' Analog input 1 absolute mode
 setconfig(_AMOD, 2, 1) ' Analog input 2 absolute mode
 
 ' Undervoltage/overvoltage limits (p214)
-setconfig(_OVL, 700)
-setconfig(_UVL, 280)
+setconfig(_OVL, 300)
+setconfig(_UVL, 200)
 
 for ch = 1 andwhile ch <= MAX_CHANNELS evaluate ch++
 	' Encoder, speed config (p208, p221)
-	setconfig(_EMOD, ch, 50)
+	setconfig(_EMOD, ch, 0)
 	setconfig(_EPPR, ch, 1024)
-	setconfig(_MXRPM, ch, 3500)
+	setconfig(_MXRPM, ch, 500)
 	setconfig(_CLERD, ch, 0)
 
 	' Current limit (p216)
-	setconfig(_ALIM, ch, 1500)
-	setconfig(_ATGA, ch, 2000)
-	setconfig(_ATGD, ch, 50)
-	setconfig(_ATRIG, ch, 0)
+	setconfig(_ALIM, ch, 650)
+	'setconfig(_ATGA, ch, 0)
+	setconfig(_ATGD, ch, 1000)
+	setconfig(_ATRIG, ch, 750)
 
 	' Max acceleration/deceleration (p219)
-	setconfig(_MAC, ch, 20000)
-	setconfig(_MDEC, ch, 20000)
+	setconfig(_MAC, ch, 250)
+	setconfig(_MDEC, ch, 250)
 next
 
 top:
@@ -50,7 +50,7 @@ top:
 
 			' Motor to be stopped (high-Z).
 			if getvalue(_VAR, ch) = -1 then
-				setconfig(_MMOD, ch, 1)
+				setconfig(_MMOD, ch, 0)
 				setconfig(_KP, ch, 0)
 				setconfig(_KI, ch, 0)
 				setconfig(_KD, ch, 0)
@@ -60,7 +60,7 @@ top:
 
 			' Motor in velocity-control mode.
 			if getvalue(_VAR, ch) = 0 then
-				setconfig(_MMOD, ch, 1)
+				setconfig(_MMOD, ch, 0)
 				setconfig(_KP, ch, 20)
 				setconfig(_KI, ch, 40)
 				setconfig(_KD, ch, 10)
@@ -69,11 +69,11 @@ top:
 
 			' Motor in position-control mode.
 			if getvalue(_VAR, ch) = 1 then
-				setconfig(_MMOD, ch, 3)
+				setconfig(_MMOD, ch, 0)
 				setconfig(_KP, ch, 2)
-				setconfig(_KI, ch, 0)
+				setconfig(_KI, ch, 2)
 				setconfig(_KD, ch, 0)
-				setconfig(_ICAP, ch, 0)
+				setconfig(_ICAP, ch, 100)
 			end if
 		end if
 		
